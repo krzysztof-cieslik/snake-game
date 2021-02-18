@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 body, html {
   margin: 0;
   padding: 0;
@@ -36,4 +39,7 @@ h1 {
 p {
   font-size: 30px;
   text-align: center;
+}
+#snake-game {
+  border: 1px black solid;
 }
