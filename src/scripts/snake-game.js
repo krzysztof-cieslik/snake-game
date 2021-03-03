@@ -1,7 +1,9 @@
 let canvas = document.getElementById("snake-game");
 let ctx = canvas.getContext("2d");
-let ax = canvas.width / 2 - 10;
-let ay = canvas.height / 2 - 10;
+let px = canvas.width / 2 - 10;
+let py = canvas.height / 2 - 10;
+let input;
+let mx = 0, my = 0;
 
 /*for (let i = 20; i < canvas.width; i += 20) {
     ctx.beginPath();
@@ -40,7 +42,7 @@ for (let i = 0; i < canvas.height; i += 20) {
 
 function drawSnake() {
     ctx.beginPath();
-    ctx.rect(ax, ay, 20, 20);
+    ctx.rect(px, py, 20, 20);
     ctx.fillStyle = "red";
     ctx.fill();
     ctx.closePath();
@@ -48,7 +50,37 @@ function drawSnake() {
 
 function draw() {
     drawSnake();
-    ay -= 20;
+    px += mx;
+    py += my
+    window.addEventListener('keydown', e => {
+        switch (e.key) {
+            case 'ArrowUp':
+                if (input === 'down') break
+                mx = 0;
+                my = -20;
+                input = 'up';
+                break
+            case 'ArrowDown':
+                if (input === 'up') break
+                mx = 0;
+                my = 20;
+                input = 'down';
+                break
+            case 'ArrowLeft':
+                if (input === 'right') break
+                mx = -20;
+                my = 0;
+                input = 'left';
+                break
+            case 'ArrowRight':
+                if (input === 'left') break
+                mx = 20;
+                my = 0;
+                input = 'right';
+                break
+        }
+    })
 }
+
 
 setInterval(draw, 100);
