@@ -59,3 +59,9 @@ h1 {
   border: 1px black solid;
   background-color: white;
 }
+.leftdiv {
+    background-color: #339966;
+    height:90%;
+    width:20px;
+
+}
