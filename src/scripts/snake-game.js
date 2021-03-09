@@ -1,86 +1,77 @@
-let canvas = document.getElementById("snake-game");
-let ctx = canvas.getContext("2d");
-let px = canvas.width / 2 - 10;
-let py = canvas.height / 2 - 10;
-let input;
-let mx = 0, my = 0;
+let canvas = document.getElementById("snake-game")
+let ctx = canvas.getContext("2d")
+let snakeDirection = {mx: 0, my: 0}
+let snakeBody = [
+    {x: 340, y: 340},
+    {x: 340, y: 360},
+    {x: 340, y: 380},
+    {x: 340, y: 400}
+]
 
-/*for (let i = 20; i < canvas.width; i += 20) {
-    ctx.beginPath();
-    ctx.moveTo(i, 0);
-    ctx.lineTo(i, canvas.height);
-    ctx.strokeStyle = "rgb(181, 181, 181)";
-    ctx.stroke();
-    ctx.closePath();
-}
-for (let i = 20; i < canvas.height; i += 20) {
-    ctx.beginPath();
-    ctx.moveTo(0, i);
-    ctx.lineTo(canvas.width, i);
-    ctx.strokeStyle = "rgb(181, 181, 181)";
-    ctx.stroke();
-    ctx.closePath();
-}*/
+setInterval(animateSnake, 100)
 
-let color = 0;
+drawSnakeStartingPosition()
 
-for (let i = 0; i < canvas.height; i += 20) {
-    for (let j = 0; j < canvas.width; j += 20) {
-        ctx.beginPath();
-        ctx.rect(j, i, 20, 20);
-        if (color === 0) {
-            ctx.fillStyle = "#99c2ff";
-            color = 1;
-        } else {
-            ctx.fillStyle = "white";
-            color = 0;
+function animateSnake() {
+    changeSnakeDirection()
+
+    if (snakeDirection.mx !== 0 || snakeDirection.my !== 0) {
+        for (let i = snakeBody.length - 1; i >= 1; i--) {
+            snakeBody[i].x = snakeBody[i - 1].x
+            snakeBody[i].y = snakeBody[i - 1].y
         }
-        ctx.fill();
-        ctx.closePath();
+        drawSnakeHead()
+        eraseSnakeTail()
     }
 }
 
-function drawSnake() {
-    ctx.beginPath();
-    ctx.rect(px, py, 20, 20);
-    ctx.fillStyle = "red";
-    ctx.fill();
-    ctx.closePath();
+function drawSnakeStartingPosition() {
+    for(let i = 0; i < snakeBody.length - 1; i++ ) {
+        ctx.beginPath()
+        ctx.rect(snakeBody[i].x, snakeBody[i].y, 20, 20)
+        ctx.fillStyle = "red"
+        ctx.fill()
+        ctx.closePath()
+    }
 }
 
-function draw() {
-    drawSnake();
-    px += mx;
-    py += my
-    window.addEventListener('keydown', e => {
+function drawSnakeHead() {
+    snakeBody[0].x += snakeDirection.mx
+    snakeBody[0].y += snakeDirection.my
+    ctx.beginPath()
+    ctx.rect(snakeBody[0].x, snakeBody[0].y, 20, 20)
+    ctx.fillStyle = "red"
+    ctx.fill()
+    ctx.closePath()
+}
+
+function eraseSnakeTail() {
+    ctx.beginPath()
+    ctx.clearRect(snakeBody[snakeBody.length - 1].x, snakeBody[snakeBody.length - 1].y, 20, 20)
+    ctx.closePath()
+}
+
+function changeSnakeDirection() {
+    let keydown = function(e) {
         switch (e.key) {
             case 'ArrowUp':
-                if (input === 'down') break
-                mx = 0;
-                my = -20;
-                input = 'up';
+                if (snakeDirection.my === 20) break
+                snakeDirection = {mx: 0, my: -20}
                 break
             case 'ArrowDown':
-                if (input === 'up') break
-                mx = 0;
-                my = 20;
-                input = 'down';
+                if (snakeDirection.my === -20) break
+                snakeDirection = {mx: 0, my: 20}
                 break
             case 'ArrowLeft':
-                if (input === 'right') break
-                mx = -20;
-                my = 0;
-                input = 'left';
+                if (snakeDirection.mx === 20) break
+                snakeDirection = {mx: -20, my: 0}
                 break
             case 'ArrowRight':
-                if (input === 'left') break
-                mx = 20;
-                my = 0;
-                input = 'right';
+                if (snakeDirection.mx === -20) break
+                snakeDirection = {mx: 20, my: 0}
                 break
         }
-    })
+        removeEventListener('keydown', keydown)
+    }
+    addEventListener('keydown', keydown)
 }
-
-
-setInterval(draw, 100);
