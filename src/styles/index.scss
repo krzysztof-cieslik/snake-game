@@ -52,5 +52,6 @@ h1 {
 
 #snake-game {
   border: 1px black solid;
-  background-color: white;
+  background-image: url("../assets/board.png");
+  background-size: contain;
 }
