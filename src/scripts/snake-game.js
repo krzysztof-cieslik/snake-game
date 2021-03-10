@@ -4,17 +4,7 @@ let snakeDirection = {mx: 0, my: 0}
 let snakeBody = [
     {x: 340, y: 340},
     {x: 340, y: 360},
-    {x: 340, y: 380},
-    {x: 340, y: 400},
-    {x: 340, y: 420},
-    {x: 340, y: 440},
-    {x: 340, y: 460},
-    {x: 340, y: 480},
-    {x: 340, y: 500},
-    {x: 340, y: 520},
-    {x: 340, y: 540},
-    {x: 340, y: 560},
-    {x: 340, y: 580}
+    {x: 340, y: 380}
 ]
 let foodPosition = {x: 340, y: 340}
 let startGame = true
@@ -29,15 +19,14 @@ function drawBoard() {
     if (snakeDirection.mx !== 0 || snakeDirection.my !== 0) {
         if (onSnake(foodPosition)) {
             drawFood()
+            snakeBody.push({...snakeBody[snakeBody.length - 1]})
         }
-
-        eraseSnakeTail()
 
         for (let i = snakeBody.length - 1; i > 0; i--) {
             snakeBody[i].x = snakeBody[i - 1].x
             snakeBody[i].y = snakeBody[i - 1].y
         }
-
+        eraseSnakeTail()
         drawSnakeHead()
     }
 
@@ -51,17 +40,7 @@ function drawBoard() {
         snakeBody = [
             {x: 340, y: 340},
             {x: 340, y: 360},
-            {x: 340, y: 380},
-            {x: 340, y: 400},
-            {x: 340, y: 420},
-            {x: 340, y: 440},
-            {x: 340, y: 460},
-            {x: 340, y: 480},
-            {x: 340, y: 500},
-            {x: 340, y: 520},
-            {x: 340, y: 540},
-            {x: 340, y: 560},
-            {x: 340, y: 580}
+            {x: 340, y: 380}
         ]
         drawSnakeStartingPosition()
     }
