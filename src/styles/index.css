@@ -30,7 +30,7 @@ body, html {
 
 .flex-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   margin: 24px 0;
 }
@@ -67,9 +67,15 @@ h1 {
   margin: 0;
   padding-top: 16px;
 }
-snake1 {
+
+.snake_container {
+  height: 100%;
+  margin-left: 11%;
+}
+
+.snake1 {
     transform: rotate(45deg);
 }
-snake2 {
-    transform: rotate(135deg);
+.snake2 {
+  transform: rotate(-45deg) scaleX(-1);
 }
