@@ -71,7 +71,7 @@ function drawSnakeStartingPosition() {
     for (let i = 0; i < snakeBody.length; i++) {
         ctx.beginPath()
         ctx.rect(snakeBody[i].x, snakeBody[i].y, 20, 20)
-        ctx.fillStyle = "red"
+        ctx.fillStyle = "#339966"
         ctx.fill()
         ctx.closePath()
     }
@@ -83,7 +83,7 @@ function drawSnakeHead() {
     snakeBody[0].y += snakeDirection.my
     ctx.beginPath()
     ctx.rect(snakeBody[0].x, snakeBody[0].y, 20, 20)
-    ctx.fillStyle = "red"
+    ctx.fillStyle = "#339966"
     ctx.fill()
     ctx.closePath()
 }
@@ -152,7 +152,7 @@ function drawFood() {
     foodPosition = getRandomFoodPosition()
     ctx.beginPath()
     ctx.rect(foodPosition.x, foodPosition.y, 20, 20)
-    ctx.fillStyle = "green"
+    ctx.fillStyle = "red"
     ctx.fill()
     ctx.closePath()
 }
