@@ -1,20 +1,19 @@
 let canvas = document.getElementById("snake-game")
 let ctx = canvas.getContext("2d")
-let snakeDirection = {mx: 0, my: 0}
-let snakeBody = [
-    {x: 340, y: 340},
-    {x: 340, y: 360},
-    {x: 340, y: 380}
-]
-let foodPosition = {x: 340, y: 340}
-let startGame = true
+let snakeDirection
+let snakeBody
+let foodPosition
 
 setInterval(drawBoard, 100)
 
-drawSnakeStartingPosition()
+gameBegin()
 
 function drawBoard() {
     changeSnakeDirection()
+
+    if (snakeBody[0].x < 0 || snakeBody[0].x >= 700 || snakeBody[0].y < 0 || snakeBody[0].y >= 700 || snakeCollision()) {
+        gameBegin()
+    }
 
     if (snakeDirection.mx !== 0 || snakeDirection.my !== 0) {
         if (onSnake(foodPosition)) {
@@ -29,21 +28,20 @@ function drawBoard() {
         eraseSnakeTail()
         drawSnakeHead()
     }
+}
 
-    if (snakeBody[0].x < 0 || snakeBody[0].x >= 700 || snakeBody[0].y < 0 || snakeBody[0].y >= 700 || snakeCollision()) {
-        ctx.beginPath()
-        ctx.clearRect(0, 0, 700, 700)
-        ctx.closePath()
-        foodPosition = {x: 340, y: 340}
-        startGame = true
-        snakeDirection = {mx: 0, my: 0}
-        snakeBody = [
-            {x: 340, y: 340},
-            {x: 340, y: 360},
-            {x: 340, y: 380}
-        ]
-        drawSnakeStartingPosition()
-    }
+function gameBegin() {
+    ctx.beginPath()
+    ctx.clearRect(0, 0, 700, 700)
+    ctx.closePath()
+    foodPosition = {x: 340, y: 340}
+    snakeDirection = {mx: 0, my: 0}
+    snakeBody = [
+        {x: 340, y: 340},
+        {x: 340, y: 360},
+        {x: 340, y: 380}
+    ]
+    drawSnakeStartingPosition()
 }
 
 function drawSnakeStartingPosition() {
@@ -56,45 +54,24 @@ function drawSnakeStartingPosition() {
     }
 }
 
-
-function drawSnakeHead() {
-    snakeBody[0].x += snakeDirection.mx
-    snakeBody[0].y += snakeDirection.my
-    ctx.beginPath()
-    ctx.rect(snakeBody[0].x, snakeBody[0].y, 20, 20)
-    ctx.fillStyle = "#339966"
-    ctx.fill()
-    ctx.closePath()
-}
-
-function eraseSnakeTail() {
-    ctx.beginPath()
-    ctx.clearRect(snakeBody[snakeBody.length - 1].x, snakeBody[snakeBody.length - 1].y, 20, 20)
-    ctx.closePath()
-}
-
 function changeSnakeDirection() {
     let keydown = function (e) {
         switch (e.key) {
             case 'ArrowUp':
                 if (snakeDirection.my === 20) break
                 snakeDirection = {mx: 0, my: -20}
-                startGame = false
                 break
             case 'ArrowDown':
-                if (snakeDirection.my === -20 || startGame) break
+                if (snakeDirection.my === -20 || snakeDirection.mx === 0 && snakeDirection.my === 0) break
                 snakeDirection = {mx: 0, my: 20}
-                startGame = false
                 break
             case 'ArrowLeft':
                 if (snakeDirection.mx === 20) break
                 snakeDirection = {mx: -20, my: 0}
-                startGame = false
                 break
             case 'ArrowRight':
                 if (snakeDirection.mx === -20) break
                 snakeDirection = {mx: 20, my: 0}
-                startGame = false
                 break
         }
         removeEventListener('keydown', keydown)
@@ -102,19 +79,15 @@ function changeSnakeDirection() {
     addEventListener('keydown', keydown)
 }
 
-function getRandomPosition() {
-    return {
-        x: Math.floor(Math.random() * Math.floor(35)) * 20,
-        y: Math.floor(Math.random() * Math.floor(35)) * 20
+function snakeCollision() {
+    for (let i = 1; i < snakeBody.length - 1; i++) {
+        if (snakeBody[0].x === snakeBody[i].x && snakeBody[0].y === snakeBody[i].y) {
+            console.log('true')
+            return true
+        }
     }
-}
-
-function getRandomFoodPosition() {
-    let foodPosition
-    while (foodPosition == null || onSnake(foodPosition)) {
-        foodPosition = getRandomPosition()
-    }
-    return foodPosition
+    console.log('false')
+    return false
 }
 
 function onSnake(position) {
@@ -136,19 +109,39 @@ function drawFood() {
     ctx.closePath()
 }
 
-function snakeCollision() {
-    for (let i = 1; i < snakeBody.length - 1; i++) {
-        if (snakeBody[0].x === snakeBody[i].x && snakeBody[0].y === snakeBody[i].y) {
-            console.log('true')
-            return true
-        }
+function getRandomFoodPosition() {
+    let foodPosition
+    while (foodPosition == null || onSnake(foodPosition)) {
+        foodPosition = getRandomPosition()
     }
-    console.log('false')
-    return false
+    return foodPosition
+}
+
+function getRandomPosition() {
+    return {
+        x: Math.floor(Math.random() * Math.floor(35)) * 20,
+        y: Math.floor(Math.random() * Math.floor(35)) * 20
+    }
+}
+
+function eraseSnakeTail() {
+    ctx.beginPath()
+    ctx.clearRect(snakeBody[snakeBody.length - 1].x, snakeBody[snakeBody.length - 1].y, 20, 20)
+    ctx.closePath()
+}
+
+function drawSnakeHead() {
+    snakeBody[0].x += snakeDirection.mx
+    snakeBody[0].y += snakeDirection.my
+    ctx.beginPath()
+    ctx.rect(snakeBody[0].x, snakeBody[0].y, 20, 20)
+    ctx.fillStyle = "#339966"
+    ctx.fill()
+    ctx.closePath()
 }
 
 window.addEventListener("keydown", function (e) {
-    if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) > -1) {
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) > -1) {
         e.preventDefault();
     }
 }, false);
