@@ -69,8 +69,10 @@ h1 {
 }
 
 .snake_container {
-  height: 100%;
-  margin-left: 11%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75%;
 }
 
 .snake1 {
